@@ -1,4 +1,3 @@
-import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -205,41 +204,43 @@ def send_message(phone_number, message=None, attatchment=None):
 def main(data):
     if not (open_whatsapp()): return
     users = []
-    for ind, d in enumerate(data):
-        user = d
-    
-        name = user[0]
-        country_code = '91'
-        phone_number = country_code + str(user[1])
-        message = user[2]
-        status = user[3]
-        timestamp = user[4]
-        attatchment = user[5]
-        if attatchment:
-            attatchment = base_dir + f'\\images\\{attatchment}'
+    try:
+        for ind, d in enumerate(data):
+            user = d
+            name = user[0]
+            country_code = '91'
+            phone_number = country_code + str(user[1])
+            message = user[2]
+            status = user[3]
+            timestamp = user[4]
+            attatchment = user[5]
+            if attatchment:
+                attatchment = base_dir + f'\\images\\{attatchment}'
 
-        print(f'{ind}. Sending message to {name}')
-        
-        if status:
+            print(f'{ind}. Sending message to {name}')
             
-            print(f'Message is already sent to {name} at {timestamp}')
-        
-        elif not (valid_user(phone_number)):   
-            user[3] = 'Invalid User'
-            pass
-        else:
-            send_message(phone_number, message, attatchment=attatchment)
-            # send_message(phone_number, message)
-            cur_timestamp = get_timestamp()
-            user[3] = 'Sent'
-            user[4] = cur_timestamp
-        users.append(user)
+            if status:
+                
+                print(f'Message is already sent to {name} at {timestamp}')
+            
+            elif not (valid_user(phone_number)):   
+                user[3] = 'Invalid User'
+                pass
+            else:
+                send_message(phone_number, message, attatchment=attatchment)
+                # send_message(phone_number, message)
+                cur_timestamp = get_timestamp()
+                user[3] = 'Sent'
+                user[4] = cur_timestamp
+    
+            users.append(user)
     
         # print(f'Some error enocurred. Possible key not found error')
         print('=======================================================')
         print('')
-    print(users)
-    update_sheet(users)
+    finally:
+        print(users)
+        update_sheet(users)
     # driver.quit()
 
 
