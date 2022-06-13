@@ -4,7 +4,7 @@ selenium_data/
 chromedriver.exe
 credentials.json
 test.py
-testSheetApi.py
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
