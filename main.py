@@ -1,3 +1,4 @@
+import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -63,7 +64,7 @@ def get_driver():
     # This argument will prevent from scanning qr code again and again
     # place your own username  .....\\Users\\<username>\\.....
     options.add_argument(f"user-data-dir={sess_data}")
-    options.add_extension("extension/wa.crx")
+    # options.add_extension("extension/wa.crx")
 
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
@@ -79,8 +80,9 @@ ele_wait = 5
 
 
 def open_whatsapp(wait_till=60):
-    driver.get('https://web.whatsapp.com/')
     # Wait for 60sec or until page is fully loaded
+  
+    driver.get('https://web.whatsapp.com/')
     try:
         side_pane = WebDriverWait(driver, wait_till).until(
             lambda d: d.find_element(By.XPATH, '//div[@id="side"]'))
@@ -101,8 +103,10 @@ def valid_user(phone_number):
     print('=======================================================')
     print(f'Trying to send message to {phone_number}')
     print('Opening phone number input box')
-    action.key_down(Keys.CONTROL).key_down(Keys.ALT).send_keys('s').key_up(
-        Keys.CONTROL).key_up(Keys.ALT).perform()
+    new_chat_btn =WebDriverWait(
+        driver, ele_wait).until(lambda d: d.find_element(
+            By.XPATH, '//div[@id="startNonContactChat"]'))
+    new_chat_btn.click()
     sleep(1)
     # Enter contact number to input box
     phone_number_box = WebDriverWait(
@@ -114,12 +118,15 @@ def valid_user(phone_number):
     chat_btn = WebDriverWait(driver, ele_wait).until(
         lambda d: d.find_element(By.XPATH, '//a[@class="btn-ok"]'))
     chat_btn.click()
-    sleep(3)
+    sleep(5)
 
     try:
         invalid_phone_box = WebDriverWait(driver, 2).until(
-            lambda d: d.find_element(By.XPATH, '//div[@class="_3J6wB"]'))
+            lambda d: d.find_element(By.XPATH, '//div[@data-animate-modal-popup="true"]'))
         print(f'User with phone number {phone_number} is not on whatsapp')
+        invalid_phone_box_okay_btn = invalid_phone_box.find_element(By.XPATH, '//div[@role="button"]')
+        invalid_phone_box_okay_btn.click()
+
         return False
     except:
         return True

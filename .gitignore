@@ -1,6 +1,7 @@
 # project sepcefic
 .vscode
 selenium_data/
+extension/
 chromedriver.exe
 credentials.json
 test.py
