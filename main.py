@@ -89,10 +89,12 @@ def open_whatsapp(wait_till=60):
     except:
         print('Failed to open whatsapp. Try again')
         return False
+    print("Whatsapp opened sucessfully")
     return True
 
 
 def valid_user(phone_number):
+    print("valid user called")
     # max waiting time to find an element
     ele_wait = 5
 
@@ -205,35 +207,35 @@ def main(data):
     users = []
     for ind, d in enumerate(data):
         user = d
-        try:
-            name = user[0]
-            country_code = '91'
-            phone_number = country_code + str(user[1])
-            message = user[2]
-            status = user[3]
-            timestamp = user[4]
-            attatchment = user[5]
-            if attatchment:
-                attatchment = base_dir + f'\\images\\{attatchment}'
+    
+        name = user[0]
+        country_code = '91'
+        phone_number = country_code + str(user[1])
+        message = user[2]
+        status = user[3]
+        timestamp = user[4]
+        attatchment = user[5]
+        if attatchment:
+            attatchment = base_dir + f'\\images\\{attatchment}'
 
-            print(f'{ind}. Sending message to {name}')
+        print(f'{ind}. Sending message to {name}')
+        
+        if status:
             
-            if False:
-                
-                print(f'Message is already sent to {name} at {timestamp}')
-            
-            elif not (valid_user(phone_number)):   
-                user[3] = 'Invalid User'
-                pass
-            else:
-                send_message(phone_number, message, attatchment=attatchment)
-                # send_message(phone_number, message)
-                user[3] = 'Sent'
-                cur_timestamp = get_timestamp()
-                user[4] = cur_timestamp
-            users.append(user)
-        except:
-            print(f'Some error enocurred. Possible key not found error')
+            print(f'Message is already sent to {name} at {timestamp}')
+        
+        elif not (valid_user(phone_number)):   
+            user[3] = 'Invalid User'
+            pass
+        else:
+            send_message(phone_number, message, attatchment=attatchment)
+            # send_message(phone_number, message)
+            cur_timestamp = get_timestamp()
+            user[3] = 'Sent'
+            user[4] = cur_timestamp
+        users.append(user)
+    
+        # print(f'Some error enocurred. Possible key not found error')
         print('=======================================================')
         print('')
     print(users)
